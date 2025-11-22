@@ -9,6 +9,7 @@ import { ForgotPasswordModal } from '@/components/ForgotPasswordModal';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
 import { Smartphone, Eye, EyeOff } from 'lucide-react';
+import { AWS_CONFIG } from '@/config/aws';
 
 const signUpSchema = z.object({
   name: z.string().trim().min(2, 'Name must be at least 2 characters').max(100, 'Name too long'),
@@ -282,9 +283,13 @@ const Auth = () => {
         </div>
 
         <div className="bg-muted/50 rounded-lg p-3 text-xs text-muted-foreground">
-          <p className="font-medium mb-1">🔒 AWS Integration Ready</p>
+          <p className="font-medium mb-1">
+            {AWS_CONFIG.cognitoUserPoolId ? '🔒 AWS Cognito Active' : '⚙️ Development Mode'}
+          </p>
           <p>
-            Authentication is ready for AWS Cognito. Configure your AWS credentials in the deployment guide.
+            {AWS_CONFIG.cognitoUserPoolId 
+              ? 'Authentication is using AWS Cognito.' 
+              : 'Using mock authentication. Configure AWS Cognito credentials to use production auth.'}
           </p>
         </div>
       </Card>
