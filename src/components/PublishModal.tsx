@@ -52,29 +52,23 @@ export const PublishModal = ({ open, onOpenChange }: PublishModalProps) => {
                 </div>
 
                 <div>
-                  <h4 className="font-semibold mb-2">2. App Signing</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Generate a signing key and configure app signing in Play Console
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold mb-2">3. Build APK/AAB</h4>
+                  <h4 className="font-semibold mb-2">2. Connect Your Account</h4>
                   <p className="text-sm text-muted-foreground mb-2">
-                    Download your APK from AppDev and prepare your app bundle
+                    Connect your Google Play Console account to AppDev
                   </p>
-                  <ul className="list-disc list-inside text-sm text-muted-foreground ml-2">
-                    <li>Click "Download APK" button</li>
-                    <li>Upload to Play Console</li>
-                    <li>Complete store listing</li>
-                  </ul>
+                  <Button className="bg-primary hover:bg-primary/90">
+                    Connect Google Play Console
+                  </Button>
                 </div>
 
                 <div>
-                  <h4 className="font-semibold mb-2">4. Store Listing</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Prepare app description, screenshots, icon, and privacy policy
+                  <h4 className="font-semibold mb-2">3. Build & Publish APK</h4>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Publish your app directly to Google Play Store (5 credits)
                   </p>
+                  <Button className="bg-green-600 hover:bg-green-700 text-white">
+                    Publish to Google Play Store
+                  </Button>
                 </div>
 
                 <div className="p-4 bg-primary/10 rounded-lg border border-primary/20">
@@ -105,29 +99,23 @@ export const PublishModal = ({ open, onOpenChange }: PublishModalProps) => {
                 </div>
 
                 <div>
-                  <h4 className="font-semibold mb-2">2. Certificates & Provisioning</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Create certificates and provisioning profiles in Apple Developer Portal
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold mb-2">3. Build IPA</h4>
+                  <h4 className="font-semibold mb-2">2. Connect Your Account</h4>
                   <p className="text-sm text-muted-foreground mb-2">
-                    Download your IPA from AppDev and prepare for App Store Connect
+                    Connect your Apple Developer account to AppDev
                   </p>
-                  <ul className="list-disc list-inside text-sm text-muted-foreground ml-2">
-                    <li>Click "Download IPA" button</li>
-                    <li>Upload via Xcode or Transporter</li>
-                    <li>Submit for review</li>
-                  </ul>
+                  <Button className="bg-primary hover:bg-primary/90">
+                    Connect Apple Developer Account
+                  </Button>
                 </div>
 
                 <div>
-                  <h4 className="font-semibold mb-2">4. App Store Connect</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Complete app information, screenshots, pricing, and availability
+                  <h4 className="font-semibold mb-2">3. Build & Publish IPA</h4>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Publish your app directly to Apple App Store (5 credits)
                   </p>
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                    Publish to Apple App Store
+                  </Button>
                 </div>
 
                 <div className="p-4 bg-primary/10 rounded-lg border border-primary/20">
