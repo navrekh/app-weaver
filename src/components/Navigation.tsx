@@ -55,7 +55,7 @@ export const Navigation = ({ onPricingClick, onPublishClick }: NavigationProps) 
               + New Project
             </Button>
 
-            {user && (
+            {user ? (
               <>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -79,6 +79,10 @@ export const Navigation = ({ onPricingClick, onPublishClick }: NavigationProps) 
                   <span className="text-sm font-medium text-primary">5 Credits</span>
                 </div>
               </>
+            ) : (
+              <Button size="sm" onClick={() => navigate('/auth')}>
+                Sign In
+              </Button>
             )}
           </div>
 
@@ -109,7 +113,7 @@ export const Navigation = ({ onPricingClick, onPublishClick }: NavigationProps) 
                 <Upload className="w-4 h-4 mr-2" />
                 Publish
               </Button>
-              {user && (
+              {user ? (
                 <>
                   <div className="text-xs text-muted-foreground px-2 py-1">
                     {user.email}
@@ -119,6 +123,10 @@ export const Navigation = ({ onPricingClick, onPublishClick }: NavigationProps) 
                     Sign Out
                   </Button>
                 </>
+              ) : (
+                <Button size="sm" onClick={() => navigate('/auth')} className="w-full">
+                  Sign In
+                </Button>
               )}
             </div>
           </div>
