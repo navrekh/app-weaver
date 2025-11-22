@@ -108,7 +108,7 @@ const Dashboard = () => {
       <div className="flex-1 flex overflow-hidden pt-16">
         {/* Left Sidebar */}
         <aside className="w-48 border-r border-border/50 bg-background/50 p-4 flex flex-col gap-2">
-          <Link to="/dashboard" className="flex items-center gap-3 px-4 py-2 rounded-lg bg-accent text-accent-foreground transition-colors text-sm font-medium">
+          <Link to="/" className="flex items-center gap-3 px-4 py-2 rounded-lg bg-accent text-accent-foreground transition-colors text-sm font-medium">
             <Home className="w-4 h-4" />
             <span>Home</span>
           </Link>
