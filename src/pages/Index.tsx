@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { 
   Smartphone, 
   Download, 
@@ -34,18 +35,18 @@ const Index = () => {
       <div className="flex-1 flex overflow-hidden pt-16">
         {/* Left Sidebar */}
         <aside className="w-48 border-r border-border/50 bg-background/50 p-4 flex flex-col gap-2">
-          <button className="flex items-center gap-3 px-4 py-2 rounded-lg bg-accent text-accent-foreground transition-colors text-sm font-medium">
+          <Link to="/" className="flex items-center gap-3 px-4 py-2 rounded-lg bg-accent text-accent-foreground transition-colors text-sm font-medium">
             <Home className="w-4 h-4" />
             <span>Home</span>
-          </button>
-          <button className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-accent transition-colors text-sm">
+          </Link>
+          <Link to="/projects" className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-accent transition-colors text-sm">
             <FolderOpen className="w-4 h-4" />
             <span>My Projects</span>
-          </button>
-          <button className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-accent transition-colors text-sm">
+          </Link>
+          <Link to="/build-history" className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-accent transition-colors text-sm">
             <History className="w-4 h-4" />
             <span>Build History</span>
-          </button>
+          </Link>
         </aside>
 
         {/* Center - Phone Preview */}
@@ -112,7 +113,7 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="flex-1 p-4 space-y-4 overflow-auto">
+          <div className="flex-1 p-4 space-y-4 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 280px)' }}>
             <div className="bg-primary/10 rounded-lg p-3">
               <p className="text-sm">Welcome to AppDev! Describe your app idea or paste a Figma URL to get started.</p>
               <p className="text-xs text-muted-foreground mt-1">6:22 PM</p>
