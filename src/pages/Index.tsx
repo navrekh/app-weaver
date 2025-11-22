@@ -39,6 +39,24 @@ const Index = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [appType, setAppType] = useState<"default" | "cricket" | "ecommerce" | "social">("default");
 
+  const handleFigmaImport = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.fig,.json';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const aiResponse = {
+          role: "assistant",
+          content: `Processing Figma file: ${file.name}. I'll convert this design into a React Native app for you!`,
+          timestamp: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+        };
+        setMessages(prev => [...prev, aiResponse]);
+      }
+    };
+    input.click();
+  };
+
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isGenerating) return;
 
@@ -193,7 +211,11 @@ const Index = () => {
           </div>
           
           <div className="p-4 border-t border-border/50 space-y-3 bg-card">
-            <Button variant="outline" className="w-full glass justify-center border-primary/30">
+            <Button 
+              variant="outline" 
+              className="w-full glass justify-center border-primary/30"
+              onClick={handleFigmaImport}
+            >
               <Download className="w-4 h-4 mr-2" />
               Import Figma Design
             </Button>
