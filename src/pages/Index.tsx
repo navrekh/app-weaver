@@ -231,10 +231,6 @@ const Index = () => {
                 <Send className="w-4 h-4" />
               </Button>
             </div>
-
-            <p className="text-xs text-muted-foreground text-center">
-              No preview yet. Trigger generation from the AI assistant.
-            </p>
           </div>
         </aside>
       </div>
