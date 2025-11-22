@@ -113,7 +113,14 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col relative overflow-hidden">
+      {/* Animated Background Layers */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 opacity-30" style={{ background: 'var(--gradient-mesh)' }} />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[120px] float-animation" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] float-animation" style={{ animationDelay: '2s' }} />
+      </div>
+
       <Navigation 
         onPricingClick={() => setPricingOpen(true)}
         onPublishClick={() => setPublishOpen(true)}
@@ -122,9 +129,9 @@ const Index = () => {
       <PublishModal open={publishOpen} onOpenChange={setPublishOpen} />
       
       {/* Main Dashboard Layout */}
-      <div className="flex-1 flex overflow-hidden pt-16">
+      <div className="flex-1 flex overflow-hidden pt-16 relative z-10">
         {/* Left Sidebar */}
-        <aside className="w-48 border-r border-border/50 bg-background/50 p-4 flex flex-col gap-2">
+        <aside className="w-48 border-r border-border/50 bg-background/50 backdrop-blur-sm p-4 flex flex-col gap-2 animate-slide-in-left">
           <Link to="/" className="flex items-center gap-3 px-4 py-2 rounded-lg bg-accent text-accent-foreground transition-colors text-sm font-medium">
             <Home className="w-4 h-4" />
             <span>Home</span>
@@ -140,8 +147,8 @@ const Index = () => {
         </aside>
 
         {/* Center - Phone Preview */}
-        <main className="flex-1 flex flex-col items-center justify-center p-8 bg-muted/20">
-          <div className="flex gap-3 mb-6">
+        <main className="flex-1 flex flex-col items-center justify-center p-8 relative animate-fade-in">
+          <div className="flex gap-3 mb-6 animate-scale-in">
             <QRCodeGenerator 
               projectUrl="https://yourdomain.com/preview/demo-app"
               projectName="Demo App"
@@ -165,17 +172,17 @@ const Index = () => {
           </DeviceFrameSelector>
           
           {/* Download Buttons - Below Mobile Screen */}
-          <div className="flex gap-3 mt-6">
+          <div className="flex gap-3 mt-6 animate-fade-in" style={{ animationDelay: '0.3s', opacity: 0, animationFillMode: 'forwards' }}>
             <Button 
               variant="default" 
-              className="gap-2"
+              className="gap-2 pulse-glow hover:scale-105 transition-transform"
             >
               <Download className="w-4 h-4" />
               Download APK
             </Button>
             <Button 
               variant="default" 
-              className="gap-2"
+              className="gap-2 pulse-glow hover:scale-105 transition-transform"
             >
               <Download className="w-4 h-4" />
               Download IPA
@@ -184,7 +191,7 @@ const Index = () => {
         </main>
 
         {/* Right Sidebar - AI Chat */}
-        <aside className="w-96 border-l border-border/50 bg-card flex flex-col">
+        <aside className="w-96 border-l border-border/50 bg-card/50 backdrop-blur-sm flex flex-col animate-slide-in-right">
           <div className="p-4 border-b border-border/50 bg-card">
             <div className="flex items-center gap-2">
               <Smartphone className="w-5 h-5 text-primary" />
