@@ -1,19 +1,24 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { AWS_CONFIG } from '@/config/aws';
+import { cognitoAuth } from '@/lib/cognito';
+import { apiClient } from '@/config/aws';
 
 interface User {
   id: string;
   email: string;
   name?: string;
-  avatar?: string;
-  createdAt: string;
+  username?: string;
+}
+
+interface Session {
+  user: User;
+  token: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  session: string | null;
+  session: Session | null;
   loading: boolean;
-  signUp: (email: string, password: string, name?: string) => Promise<{ error: Error | null }>;
+  signUp: (email: string, password: string, firstName?: string, lastName?: string) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
 }
@@ -30,22 +35,36 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<string | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Check for existing session on mount
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const storedSession = localStorage.getItem('auth_session');
-        const storedUser = localStorage.getItem('auth_user');
+        const { user: cognitoUser, token } = await cognitoAuth.getCurrentUser();
         
-        if (storedSession && storedUser) {
-          setSession(storedSession);
-          setUser(JSON.parse(storedUser));
+        if (cognitoUser && token) {
+          const user: User = {
+            id: cognitoUser.username,
+            email: cognitoUser.email,
+            name: cognitoUser.attributes?.given_name 
+              ? `${cognitoUser.attributes.given_name} ${cognitoUser.attributes.family_name || ''}`.trim()
+              : undefined,
+            username: cognitoUser.username,
+          };
+          
+          const newSession: Session = {
+            user,
+            token,
+          };
+          
+          setUser(user);
+          setSession(newSession);
+          apiClient.setAuthToken(token);
         }
       } catch (error) {
-        console.error('Session check failed');
+        console.error('Session check failed:', error);
       } finally {
         setLoading(false);
       }
@@ -54,31 +73,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     checkSession();
   }, []);
 
-  const signUp = async (email: string, password: string, name?: string) => {
+  const signUp = async (email: string, password: string, firstName?: string, lastName?: string) => {
     try {
-      // TODO: Replace with AWS Cognito signup
-      // const response = await fetch(`${AWS_CONFIG.apiEndpoint}/auth/signup`, {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email, password, name })
-      // });
-
-      // Simulated signup for development
-      const newUser: User = {
-        id: crypto.randomUUID(),
+      const { user: cognitoUser, error } = await cognitoAuth.signUp({
         email,
-        name,
-        createdAt: new Date().toISOString(),
-      };
-      
-      const mockSession = btoa(JSON.stringify({ userId: newUser.id, exp: Date.now() + 86400000 }));
-      
-      localStorage.setItem('auth_session', mockSession);
-      localStorage.setItem('auth_user', JSON.stringify(newUser));
-      
-      setSession(mockSession);
-      setUser(newUser);
-      
+        password,
+        firstName,
+        lastName,
+      });
+
+      if (error) {
+        return { error: new Error(error) };
+      }
+
+      // Note: User needs to verify email before they can sign in
+      // The actual session will be created after email verification and sign in
       return { error: null };
     } catch (error) {
       return { error: error as Error };
@@ -87,26 +96,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signIn = async (email: string, password: string) => {
     try {
-      // TODO: Replace with AWS Cognito signin
-      // const response = await fetch(`${AWS_CONFIG.apiEndpoint}/auth/signin`, {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email, password })
-      // });
+      const { user: cognitoUser, token, error } = await cognitoAuth.signIn({
+        email,
+        password,
+      });
 
-      // Simulated signin for development
-      const existingUser = localStorage.getItem('auth_user');
-      
-      if (!existingUser) {
-        throw new Error('No account found. Please sign up first.');
+      if (error) {
+        return { error: new Error(error) };
       }
 
-      const user = JSON.parse(existingUser);
-      const mockSession = btoa(JSON.stringify({ userId: user.id, exp: Date.now() + 86400000 }));
+      if (!cognitoUser || !token) {
+        return { error: new Error('Sign in failed') };
+      }
+
+      const user: User = {
+        id: cognitoUser.username,
+        email: cognitoUser.email,
+        name: cognitoUser.attributes?.given_name 
+          ? `${cognitoUser.attributes.given_name} ${cognitoUser.attributes.family_name || ''}`.trim()
+          : undefined,
+        username: cognitoUser.username,
+      };
       
-      localStorage.setItem('auth_session', mockSession);
-      setSession(mockSession);
+      const newSession: Session = {
+        user,
+        token,
+      };
+      
       setUser(user);
+      setSession(newSession);
+      apiClient.setAuthToken(token);
       
       return { error: null };
     } catch (error) {
@@ -117,20 +136,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const signOut = async () => {
-    try {
-      // TODO: Replace with AWS Cognito signout
-      // await fetch(`${AWS_CONFIG.apiEndpoint}/auth/signout`, {
-      //   method: 'POST',
-      //   headers: { 'Authorization': `Bearer ${session}` }
-      // });
-
-      localStorage.removeItem('auth_session');
-      localStorage.removeItem('auth_user');
-      setSession(null);
-      setUser(null);
-    } catch (error) {
-      console.error('Signout failed');
-    }
+    cognitoAuth.signOut();
+    setSession(null);
+    setUser(null);
+    apiClient.setAuthToken('');
   };
 
   return (
