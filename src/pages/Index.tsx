@@ -17,6 +17,10 @@ import {
   DollarSign,
   Plus
 } from "lucide-react";
+import { CricketHomeScreen } from "@/components/simulator/CricketHomeScreen";
+import { EcommerceHomeScreen } from "@/components/simulator/EcommerceHomeScreen";
+import { SocialFeedScreen } from "@/components/simulator/SocialFeedScreen";
+import { DefaultHomeScreen } from "@/components/simulator/DefaultHomeScreen";
 
 const Index = () => {
   const [pricingOpen, setPricingOpen] = useState(false);
@@ -30,13 +34,7 @@ const Index = () => {
   ]);
   const [inputMessage, setInputMessage] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
-  const [appScreens, setAppScreens] = useState([
-    {
-      title: "Welcome Screen",
-      subtitle: "Ready to use",
-      icon: "smartphone"
-    }
-  ]);
+  const [appType, setAppType] = useState<"default" | "cricket" | "ecommerce" | "social">("default");
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isGenerating) return;
@@ -61,8 +59,7 @@ const Index = () => {
       setMessages(prev => [...prev, aiResponse]);
 
       // Generate mock screens based on the prompt
-      const newScreens = generateMockScreens(inputMessage);
-      setAppScreens(newScreens);
+      generateMockScreens(inputMessage);
       
       setIsGenerating(false);
     }, 1500);
@@ -72,32 +69,26 @@ const Index = () => {
     const lowerPrompt = prompt.toLowerCase();
     
     if (lowerPrompt.includes('cricket') || lowerPrompt.includes('sports')) {
-      return [
-        { title: "Home", subtitle: "Live scores", icon: "home" },
-        { title: "Matches", subtitle: "Upcoming games", icon: "calendar" },
-        { title: "Players", subtitle: "Team roster", icon: "users" },
-        { title: "Stats", subtitle: "Player statistics", icon: "chart" }
-      ];
+      setAppType("cricket");
     } else if (lowerPrompt.includes('ecommerce') || lowerPrompt.includes('shop')) {
-      return [
-        { title: "Products", subtitle: "Browse items", icon: "shopping" },
-        { title: "Cart", subtitle: "Your items", icon: "cart" },
-        { title: "Checkout", subtitle: "Complete order", icon: "credit-card" },
-        { title: "Profile", subtitle: "Your account", icon: "user" }
-      ];
+      setAppType("ecommerce");
     } else if (lowerPrompt.includes('social') || lowerPrompt.includes('chat')) {
-      return [
-        { title: "Feed", subtitle: "Latest posts", icon: "home" },
-        { title: "Messages", subtitle: "Chat", icon: "message" },
-        { title: "Notifications", subtitle: "Updates", icon: "bell" },
-        { title: "Profile", subtitle: "Your profile", icon: "user" }
-      ];
+      setAppType("social");
     } else {
-      return [
-        { title: "Home", subtitle: "Main screen", icon: "home" },
-        { title: "Features", subtitle: "App features", icon: "star" },
-        { title: "Settings", subtitle: "Preferences", icon: "settings" }
-      ];
+      setAppType("default");
+    }
+  };
+
+  const renderAppScreen = () => {
+    switch (appType) {
+      case "cricket":
+        return <CricketHomeScreen />;
+      case "ecommerce":
+        return <EcommerceHomeScreen />;
+      case "social":
+        return <SocialFeedScreen />;
+      default:
+        return <DefaultHomeScreen />;
     }
   };
 
@@ -147,50 +138,17 @@ const Index = () => {
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-36 h-7 bg-foreground rounded-b-2xl z-10" />
             
             {/* Phone Content */}
-            <div className="h-full bg-gradient-to-b from-background to-muted p-8 pt-14 overflow-y-auto">
-              <div className="flex items-center justify-between mb-10">
-                <h2 className="text-2xl font-bold">My App</h2>
-                <div className={`w-12 h-12 rounded-full ${isGenerating ? 'bg-primary animate-pulse' : 'bg-primary/50'}`} />
-              </div>
-              
-              <div className="space-y-4">
-                {appScreens.map((screen, index) => (
-                  <Card key={index} className="p-5 bg-background/80 border-border">
-                    <div className="flex items-center gap-4 mb-2">
-                      <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center">
-                        <Smartphone className="w-5 h-5 text-primary" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-base">{screen.title}</h3>
-                        <p className="text-sm text-muted-foreground">{screen.subtitle}</p>
-                      </div>
-                    </div>
-                  </Card>
-                ))}
-              </div>
-              
-              {isGenerating && (
-                <p className="text-center text-sm text-primary mt-8 animate-pulse">
-                  Generating screens...
-                </p>
+            <div className="h-full bg-gradient-to-b from-background to-muted p-6 pt-14 overflow-y-auto">
+              {isGenerating ? (
+                <div className="flex flex-col items-center justify-center h-full">
+                  <div className="w-16 h-16 rounded-full bg-primary animate-pulse mb-4" />
+                  <p className="text-center text-sm text-primary animate-pulse">
+                    Generating your app...
+                  </p>
+                </div>
+              ) : (
+                renderAppScreen()
               )}
-
-              {!isGenerating && appScreens.length === 1 && (
-                <p className="text-center text-base text-muted-foreground mt-12">
-                  Start by describing your app idea
-                </p>
-              )}
-
-              <div className="flex gap-2 mt-auto pt-6">
-                <Button variant="outline" size="sm" className="flex-1">
-                  <span className="text-red-500 mr-2">🔴</span>
-                  Sign In
-                </Button>
-                <Button variant="outline" size="sm" className="flex-1">
-                  <span className="text-red-500 mr-2">🔴</span>
-                  Sign Up
-                </Button>
-              </div>
             </div>
           </div>
         </main>
