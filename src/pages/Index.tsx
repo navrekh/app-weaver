@@ -78,11 +78,7 @@ const Index = () => {
                 Start by describing your app idea
               </p>
 
-              <Button className="w-full mt-auto bg-primary hover:bg-primary/90 text-primary-foreground" size="lg">
-                New Price
-              </Button>
-
-              <div className="flex gap-2 mt-4">
+              <div className="flex gap-2 mt-auto pt-6">
                 <Button variant="outline" size="sm" className="flex-1">
                   <span className="text-red-500 mr-2">🔴</span>
                   Sign In

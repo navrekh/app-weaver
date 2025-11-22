@@ -22,14 +22,11 @@ export const Navigation = () => {
               <DollarSign className="w-4 h-4 mr-2" />
               Pricing
             </Button>
-            <Button variant="ghost" size="sm">
-              Sign In/Sig up
-            </Button>
             <Button variant="outline" size="sm" className="glass">
               + New Project
             </Button>
             <Button size="sm" className="bg-primary hover:bg-primary/90">
-              Sign In / Sup
+              Sign In / Sign Up
             </Button>
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 border border-primary/20">
               <span className="text-sm font-medium text-primary">5 Credits</span>
