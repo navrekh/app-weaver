@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const CTA = () => {
+  const navigate = useNavigate();
+  
   return (
     <section className="py-24 relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.1),transparent_70%)]" />
@@ -19,7 +22,11 @@ export const CTA = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-[0_0_30px_hsl(var(--primary)/0.3)] hover:shadow-[0_0_50px_hsl(var(--primary)/0.4)] transition-all group">
+            <Button 
+              size="lg" 
+              onClick={() => navigate('/auth')}
+              className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-[0_0_30px_hsl(var(--primary)/0.3)] hover:shadow-[0_0_50px_hsl(var(--primary)/0.4)] transition-all group"
+            >
               Start Building Now
               <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Button>
