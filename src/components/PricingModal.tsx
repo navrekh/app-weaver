@@ -83,7 +83,19 @@ export const PricingModal = ({ open, onOpenChange }: PricingModalProps) => {
               </li>
               <li className="flex items-start gap-2">
                 <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                <span className="text-sm">Unlimited projects</span>
+                <span className="text-sm">Build 5 complete cross-platform apps</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                <span className="text-sm">AI Generation: 10 credits per app</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                <span className="text-sm">APK Build: 5 credits</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                <span className="text-sm">IPA Build: 5 credits</span>
               </li>
               <li className="flex items-start gap-2">
                 <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
@@ -91,13 +103,16 @@ export const PricingModal = ({ open, onOpenChange }: PricingModalProps) => {
               </li>
               <li className="flex items-start gap-2">
                 <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                <span className="text-sm">Advanced backend scaffolding</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                <span className="text-sm">Team collaboration features</span>
+                <span className="text-sm">Unlimited projects</span>
               </li>
             </ul>
+
+            <div className="mb-4 p-3 bg-primary/10 rounded-lg border border-primary/20">
+              <p className="text-sm font-semibold text-center mb-1">Complete App Cost</p>
+              <p className="text-xs text-center text-muted-foreground">
+                1 AI prompt (10) + 1 APK (5) + 1 IPA (5) = 20 credits per app
+              </p>
+            </div>
 
             <Button className="w-full bg-primary hover:bg-primary/90" size="lg">
               Buy Credits
