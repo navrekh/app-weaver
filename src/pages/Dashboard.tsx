@@ -18,8 +18,13 @@ import {
   History,
   Github,
   DollarSign,
-  Plus
+  Plus,
+  Code2,
+  FileCode,
+  Loader2
 } from "lucide-react";
+import { geminiCodeGenerator } from "@/services/geminiCodeGenerator";
+import { useToast } from "@/hooks/use-toast";
 import { CricketHomeScreen } from "@/components/simulator/CricketHomeScreen";
 import { EcommerceHomeScreen } from "@/components/simulator/EcommerceHomeScreen";
 import { SocialFeedScreen } from "@/components/simulator/SocialFeedScreen";
@@ -28,16 +33,19 @@ import { DefaultHomeScreen } from "@/components/simulator/DefaultHomeScreen";
 const Dashboard = () => {
   const [pricingOpen, setPricingOpen] = useState(false);
   const [publishOpen, setPublishOpen] = useState(false);
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<Array<{ role: string; content: string; timestamp: string; code?: any }>>([
     {
       role: "assistant",
-      content: "Welcome to AppDev! Describe your app idea or paste a Figma URL to get started.",
-      timestamp: "6:22 PM"
+      content: "Welcome to AppDev! Describe your app idea and I'll generate React Native or Flutter code for you.",
+      timestamp: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
     }
   ]);
   const [inputMessage, setInputMessage] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [appType, setAppType] = useState<"default" | "cricket" | "ecommerce" | "social">("default");
+  const [framework, setFramework] = useState<'react-native' | 'flutter'>('react-native');
+  const [projectName, setProjectName] = useState('MyApp');
+  const { toast } = useToast();
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isGenerating) return;
@@ -49,23 +57,53 @@ const Dashboard = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const prompt = inputMessage;
     setInputMessage("");
     setIsGenerating(true);
 
-    // Simulate AI generation
-    setTimeout(() => {
+    // Generate mock screens based on the prompt
+    generateMockScreens(prompt);
+
+    try {
+      // Generate code using Gemini
+      const generatedCode = await geminiCodeGenerator.generateCode({
+        prompt,
+        framework,
+        projectName,
+      });
+
       const aiResponse = {
         role: "assistant",
-        content: `I'm generating your app based on: "${inputMessage}". Creating screens, components, and navigation...`,
-        timestamp: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+        content: `I've generated a ${framework} project for you! Here's the complete code structure:`,
+        timestamp: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }),
+        code: generatedCode
       };
+      
       setMessages(prev => [...prev, aiResponse]);
 
-      // Generate mock screens based on the prompt
-      generateMockScreens(inputMessage);
+      toast({
+        title: 'Code Generated',
+        description: `Your ${framework} project "${projectName}" is ready!`,
+      });
+    } catch (error) {
+      console.error('Code generation error:', error);
       
+      const errorResponse = {
+        role: "assistant",
+        content: 'Sorry, I encountered an error generating the code. Please try again or rephrase your request.',
+        timestamp: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+      };
+      
+      setMessages(prev => [...prev, errorResponse]);
+      
+      toast({
+        title: 'Generation Failed',
+        description: 'Failed to generate code. Please check your API key and try again.',
+        variant: 'destructive',
+      });
+    } finally {
       setIsGenerating(false);
-    }, 1500);
+    }
   };
 
   const generateMockScreens = (prompt: string) => {
@@ -161,52 +199,113 @@ const Dashboard = () => {
             </div>
           </div>
           
-          {/* Chat Messages - Now Above Input */}
-          <div className="flex-1 p-4 space-y-4 overflow-y-auto bg-muted/30 border-2 border-primary/30 rounded-lg m-4" style={{ maxHeight: 'calc(100vh - 340px)' }}>
+          {/* Chat Messages */}
+          <div className="flex-1 p-4 space-y-4 overflow-y-auto bg-muted/30 border-2 border-primary/30 rounded-lg m-4" style={{ maxHeight: 'calc(100vh - 400px)' }}>
             {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`rounded-lg p-3 ${
-                  message.role === 'assistant'
-                    ? 'bg-primary/10 border border-primary/20'
-                    : 'bg-secondary border border-border ml-8'
-                }`}
-              >
-                <p className={`text-sm ${
-                  message.role === 'assistant' ? 'text-foreground' : 'text-secondary-foreground'
-                }`}>
-                  {message.content}
-                </p>
-                <p className="text-xs text-muted-foreground mt-1 text-right">
-                  {message.timestamp}
-                </p>
+              <div key={index} className="space-y-2">
+                <div
+                  className={`rounded-lg p-3 ${
+                    message.role === 'assistant'
+                      ? 'bg-primary/10 border border-primary/20'
+                      : 'bg-secondary border border-border ml-8'
+                  }`}
+                >
+                  <p className={`text-sm ${
+                    message.role === 'assistant' ? 'text-foreground' : 'text-secondary-foreground'
+                  }`}>
+                    {message.content}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1 text-right">
+                    {message.timestamp}
+                  </p>
+                </div>
+                
+                {message.code && (
+                  <Card className="p-4 space-y-3 bg-card/80 ml-0">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <FileCode className="w-4 h-4 text-primary" />
+                        <h4 className="font-semibold text-sm">Generated Files</h4>
+                      </div>
+                      <span className="text-xs text-muted-foreground">
+                        {message.code.files?.length || 0} files
+                      </span>
+                    </div>
+                    
+                    <div className="space-y-2 max-h-[300px] overflow-y-auto">
+                      {message.code.files?.map((file: any, idx: number) => (
+                        <div key={idx} className="border rounded p-2 bg-muted/50">
+                          <div className="flex items-center justify-between mb-2">
+                            <code className="text-xs font-mono text-primary">{file.path}</code>
+                            <span className="text-xs px-2 py-0.5 bg-primary/10 rounded">{file.language}</span>
+                          </div>
+                          <pre className="text-xs overflow-x-auto bg-background/50 p-2 rounded max-h-[150px] overflow-y-auto">
+                            <code>{file.content}</code>
+                          </pre>
+                        </div>
+                      ))}
+                    </div>
+
+                    {message.code.dependencies?.length > 0 && (
+                      <div>
+                        <h5 className="text-xs font-semibold mb-1.5">Dependencies:</h5>
+                        <div className="flex flex-wrap gap-1">
+                          {message.code.dependencies.map((dep: string, idx: number) => (
+                            <span key={idx} className="text-xs bg-primary/10 px-2 py-1 rounded">
+                              {dep}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {message.code.instructions && (
+                      <div className="text-xs text-muted-foreground pt-2 border-t">
+                        <p className="whitespace-pre-wrap">{message.code.instructions}</p>
+                      </div>
+                    )}
+                  </Card>
+                )}
               </div>
             ))}
             {isGenerating && (
               <div className="bg-primary/10 border border-primary/20 rounded-lg p-3">
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce" />
-                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
-                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
+                  <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                  <span className="text-sm">Generating {framework} code...</span>
                 </div>
               </div>
             )}
           </div>
           
-          {/* Input Section Below Chat */}
+          {/* Input Section */}
           <div className="p-4 border-t border-border/50 space-y-3 bg-card">
-            <Button variant="outline" className="w-full glass justify-center">
-              <Download className="w-4 h-4 mr-2" />
-              Import Figma Design
-            </Button>
+            <div className="flex gap-2">
+              <Input
+                placeholder="Project Name"
+                value={projectName}
+                onChange={(e) => setProjectName(e.target.value)}
+                className="flex-1"
+              />
+            </div>
 
             <div>
               <p className="text-xs text-muted-foreground mb-2">Target Framework</p>
               <div className="flex gap-2">
-                <Button variant="default" size="sm" className="flex-1 bg-primary hover:bg-primary/90">
+                <Button 
+                  variant={framework === 'react-native' ? 'default' : 'outline'}
+                  size="sm" 
+                  className="flex-1"
+                  onClick={() => setFramework('react-native')}
+                >
                   React Native
                 </Button>
-                <Button variant="ghost" size="sm" className="flex-1">
+                <Button 
+                  variant={framework === 'flutter' ? 'default' : 'outline'}
+                  size="sm" 
+                  className="flex-1"
+                  onClick={() => setFramework('flutter')}
+                >
                   Flutter
                 </Button>
               </div>
@@ -214,11 +313,11 @@ const Dashboard = () => {
 
             <div className="flex gap-2">
               <Input 
-                placeholder="Describe your app or paste Figma URL..." 
+                placeholder={`Describe your ${framework} app...`}
                 className="glass bg-background text-foreground"
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                onKeyPress={(e) => e.key === 'Enter' && !isGenerating && handleSendMessage()}
                 disabled={isGenerating}
               />
               <Button 
@@ -227,7 +326,11 @@ const Dashboard = () => {
                 onClick={handleSendMessage}
                 disabled={isGenerating || !inputMessage.trim()}
               >
-                <Send className="w-4 h-4" />
+                {isGenerating ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Send className="w-4 h-4" />
+                )}
               </Button>
             </div>
           </div>
