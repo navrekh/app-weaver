@@ -105,32 +105,32 @@ const Index = () => {
         </main>
 
         {/* Right Sidebar - AI Chat */}
-        <aside className="w-96 border-l border-border/50 bg-background/50 flex flex-col">
-          <div className="p-4 border-b border-border/50">
+        <aside className="w-96 border-l border-border/50 bg-card flex flex-col">
+          <div className="p-4 border-b border-border/50 bg-card">
             <div className="flex items-center gap-2">
               <Smartphone className="w-5 h-5 text-primary" />
-              <h3 className="font-semibold">AI Assistant</h3>
+              <h3 className="font-semibold text-card-foreground">AI Assistant</h3>
             </div>
           </div>
           
-          <div className="flex-1 p-4 space-y-4 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 280px)' }}>
-            <div className="bg-primary/10 rounded-lg p-3">
-              <p className="text-sm">Welcome to AppDev! Describe your app idea or paste a Figma URL to get started.</p>
+          <div className="flex-1 p-4 space-y-4 overflow-y-auto bg-muted/30" style={{ maxHeight: 'calc(100vh - 280px)' }}>
+            <div className="bg-primary/10 border border-primary/20 rounded-lg p-3">
+              <p className="text-sm text-foreground">Welcome to AppDev! Describe your app idea or paste a Figma URL to get started.</p>
               <p className="text-xs text-muted-foreground mt-1">6:22 PM</p>
             </div>
             
-            <div className="bg-secondary/50 rounded-lg p-3 ml-8">
-              <p className="text-sm">cricket app</p>
+            <div className="bg-secondary border border-border rounded-lg p-3 ml-8">
+              <p className="text-sm text-secondary-foreground">cricket app</p>
               <p className="text-xs text-muted-foreground mt-1 text-right">6:03 PM</p>
             </div>
             
-            <div className="bg-primary/10 rounded-lg p-3">
-              <p className="text-sm">I'm generating your app based on "cricket app". Creating screens, components, and navigation...</p>
+            <div className="bg-primary/10 border border-primary/20 rounded-lg p-3">
+              <p className="text-sm text-foreground">I'm generating your app based on "cricket app". Creating screens, components, and navigation...</p>
               <p className="text-xs text-muted-foreground mt-1">6:03 PM</p>
             </div>
           </div>
           
-          <div className="p-4 border-t border-border/50 space-y-3">
+          <div className="p-4 border-t border-border/50 space-y-3 bg-card">
             <Button variant="outline" className="w-full glass justify-center">
               <Download className="w-4 h-4 mr-2" />
               Import Figma Design
@@ -151,7 +151,7 @@ const Index = () => {
             <div className="flex gap-2">
               <Input 
                 placeholder="Describe your app or paste Figma URL..." 
-                className="glass"
+                className="glass bg-background text-foreground"
               />
               <Button size="icon" className="bg-primary hover:bg-primary/90 shrink-0">
                 <Send className="w-4 h-4" />
