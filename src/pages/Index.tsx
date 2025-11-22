@@ -119,7 +119,7 @@ const Index = () => {
           </div>
           
           <div className="p-4 border-t border-border/50 space-y-3">
-            <Button variant="outline" className="w-full glass justify-start">
+            <Button variant="outline" className="w-full glass justify-center">
               <Download className="w-4 h-4 mr-2" />
               Import Figma Design
             </Button>
