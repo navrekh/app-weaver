@@ -4,6 +4,7 @@ import { PublishModal } from "@/components/PublishModal";
 import { DeviceFrameSelector } from "@/components/DeviceFrameSelector";
 import { QRCodeGenerator } from "@/components/QRCodeGenerator";
 import { ExportMenu } from "@/components/ExportMenu";
+import { FigmaImportModal } from "@/components/FigmaImportModal";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -37,6 +38,7 @@ const Dashboard = () => {
   const location = useLocation();
   const [pricingOpen, setPricingOpen] = useState(false);
   const [publishOpen, setPublishOpen] = useState(false);
+  const [figmaImportOpen, setFigmaImportOpen] = useState(false);
   const [messages, setMessages] = useState<Array<{ role: string; content: string; timestamp: string; code?: any }>>([
     {
       role: "assistant",
@@ -137,26 +139,24 @@ const Dashboard = () => {
     }
   };
 
-  const handleFigmaImport = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.fig,.json';
-    input.onchange = (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (file) {
-        const aiResponse = {
-          role: "assistant",
-          content: `Processing Figma file: ${file.name}. I'll convert this design into ${framework} code for you!`,
-          timestamp: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
-        };
-        setMessages(prev => [...prev, aiResponse]);
-        toast({
-          title: 'Figma Import',
-          description: `Processing ${file.name}...`,
-        });
-      }
+  const handleFigmaImport = (data: { type: 'file' | 'url'; value: File | string }) => {
+    const content = data.type === 'file' 
+      ? `Processing Figma file: ${(data.value as File).name}. I'll convert this design into ${framework} code for you!`
+      : `Processing Figma design from URL. I'll convert this design into ${framework} code for you!`;
+
+    const aiResponse = {
+      role: "assistant",
+      content,
+      timestamp: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
     };
-    input.click();
+    
+    setMessages(prev => [...prev, aiResponse]);
+    toast({
+      title: 'Figma Import',
+      description: data.type === 'file' 
+        ? `Processing ${(data.value as File).name}...`
+        : 'Processing Figma design...',
+    });
   };
 
   const handleSendMessage = async () => {
@@ -253,6 +253,11 @@ const Dashboard = () => {
       />
       <PricingModal open={pricingOpen} onOpenChange={setPricingOpen} />
       <PublishModal open={publishOpen} onOpenChange={setPublishOpen} />
+      <FigmaImportModal 
+        open={figmaImportOpen} 
+        onOpenChange={setFigmaImportOpen}
+        onImport={handleFigmaImport}
+      />
       
       {/* Main Dashboard Layout */}
       <div className="flex-1 flex overflow-hidden pt-16">
@@ -396,7 +401,7 @@ const Dashboard = () => {
               <Button 
                 variant="outline" 
                 className="flex-1 glass justify-center border-primary/30"
-                onClick={handleFigmaImport}
+                onClick={() => setFigmaImportOpen(true)}
               >
                 <Download className="w-4 h-4 mr-2" />
                 Import Figma
