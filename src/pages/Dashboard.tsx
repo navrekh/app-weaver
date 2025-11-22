@@ -289,28 +289,6 @@ const Dashboard = () => {
               />
             </div>
 
-            <div>
-              <p className="text-xs text-muted-foreground mb-2">Target Framework</p>
-              <div className="flex gap-2">
-                <Button 
-                  variant={framework === 'react-native' ? 'default' : 'outline'}
-                  size="sm" 
-                  className="flex-1"
-                  onClick={() => setFramework('react-native')}
-                >
-                  React Native
-                </Button>
-                <Button 
-                  variant={framework === 'flutter' ? 'default' : 'outline'}
-                  size="sm" 
-                  className="flex-1"
-                  onClick={() => setFramework('flutter')}
-                >
-                  Flutter
-                </Button>
-              </div>
-            </div>
-
             <div className="flex gap-2">
               <Input 
                 placeholder={`Describe your ${framework} app...`}
@@ -332,6 +310,28 @@ const Dashboard = () => {
                   <Send className="w-4 h-4" />
                 )}
               </Button>
+            </div>
+
+            <div>
+              <p className="text-xs text-muted-foreground mb-2">Target Framework</p>
+              <div className="flex gap-2">
+                <Button 
+                  variant={framework === 'react-native' ? 'default' : 'outline'}
+                  size="sm" 
+                  className="flex-1"
+                  onClick={() => setFramework('react-native')}
+                >
+                  React Native
+                </Button>
+                <Button 
+                  variant={framework === 'flutter' ? 'default' : 'outline'}
+                  size="sm" 
+                  className="flex-1"
+                  onClick={() => setFramework('flutter')}
+                >
+                  Flutter
+                </Button>
+              </div>
             </div>
           </div>
         </aside>
