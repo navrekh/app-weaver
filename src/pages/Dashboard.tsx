@@ -3,7 +3,6 @@ import { PricingModal } from "@/components/PricingModal";
 import { PublishModal } from "@/components/PublishModal";
 import { DeviceFrameSelector } from "@/components/DeviceFrameSelector";
 import { QRCodeGenerator } from "@/components/QRCodeGenerator";
-import { ExportMenu } from "@/components/ExportMenu";
 import { FigmaImportModal } from "@/components/FigmaImportModal";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -284,25 +283,65 @@ const Dashboard = () => {
               projectUrl="https://yourdomain.com/preview/demo-app"
               projectName="Demo App"
             />
-            <ExportMenu 
-              projectId="demo-project"
-              projectName="Demo App"
-            />
           </div>
           
           {/* Device Frame with Selector */}
           <DeviceFrameSelector>
-            <div key={appType} className="h-full animate-fade-in">
-              {isGenerating ? (
-                <div className="flex flex-col items-center justify-center h-full bg-gradient-to-b from-background to-muted p-6">
-                  <div className="w-16 h-16 rounded-full bg-primary animate-pulse mb-4" />
-                  <p className="text-center text-sm text-primary animate-pulse">
-                    Generating your app...
-                  </p>
-                </div>
-              ) : (
-                renderAppScreen()
-              )}
+            <div key={appType} className="h-full animate-fade-in flex flex-col">
+              <div className="flex-1 overflow-auto">
+                {isGenerating ? (
+                  <div className="flex flex-col items-center justify-center h-full bg-gradient-to-b from-background to-muted p-6">
+                    <div className="w-16 h-16 rounded-full bg-primary animate-pulse mb-4" />
+                    <p className="text-center text-sm text-primary animate-pulse">
+                      Generating your app...
+                    </p>
+                  </div>
+                ) : (
+                  renderAppScreen()
+                )}
+              </div>
+              
+              {/* Download Buttons */}
+              <div className="p-3 bg-background/95 border-t border-border/50 flex gap-2">
+                <Button 
+                  variant="default" 
+                  className="flex-1 gap-2" 
+                  size="sm"
+                  onClick={async () => {
+                    try {
+                      toast({ title: "Export Started", description: "Preparing Android APK..." });
+                      const response = await apiClient.generateExport("demo-project", "android-apk");
+                      if (response && (response as any).downloadUrl) {
+                        window.open((response as any).downloadUrl, '_blank');
+                      }
+                    } catch (error) {
+                      toast({ title: "Export Failed", description: "Unable to export APK", variant: "destructive" });
+                    }
+                  }}
+                >
+                  <Download className="w-4 h-4" />
+                  Download APK
+                </Button>
+                <Button 
+                  variant="default" 
+                  className="flex-1 gap-2" 
+                  size="sm"
+                  onClick={async () => {
+                    try {
+                      toast({ title: "Export Started", description: "Preparing iOS IPA..." });
+                      const response = await apiClient.generateExport("demo-project", "ios-ipa");
+                      if (response && (response as any).downloadUrl) {
+                        window.open((response as any).downloadUrl, '_blank');
+                      }
+                    } catch (error) {
+                      toast({ title: "Export Failed", description: "Unable to export IPA", variant: "destructive" });
+                    }
+                  }}
+                >
+                  <Download className="w-4 h-4" />
+                  Download IPA
+                </Button>
+              </div>
             </div>
           </DeviceFrameSelector>
         </main>
