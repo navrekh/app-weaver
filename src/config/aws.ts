@@ -88,7 +88,7 @@ export class AWSApiClient {
   }
 
   // Export API
-  async generateExport(projectId: string, format: 'zip' | 'github') {
+  async generateExport(projectId: string, format: 'zip' | 'github' | 'android-apk' | 'ios-ipa') {
     return this.request(`/projects/${projectId}/export`, {
       method: 'POST',
       body: JSON.stringify({ format }),
