@@ -39,7 +39,7 @@ export const Navigation = ({ onPricingClick, onPublishClick }: NavigationProps) 
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-4">
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" onClick={() => navigate('/projects')}>
               <Github className="w-4 h-4 mr-2" />
               GitHub
             </Button>
@@ -51,7 +51,7 @@ export const Navigation = ({ onPricingClick, onPublishClick }: NavigationProps) 
               <Upload className="w-4 h-4 mr-2" />
               Publish
             </Button>
-            <Button variant="outline" size="sm" className="glass">
+            <Button variant="outline" size="sm" className="glass" onClick={() => navigate('/projects')}>
               + New Project
             </Button>
 
@@ -101,7 +101,7 @@ export const Navigation = ({ onPricingClick, onPublishClick }: NavigationProps) 
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-border/50 py-2">
             <div className="flex flex-col gap-2">
-              <Button variant="ghost" size="sm" className="justify-start">
+              <Button variant="ghost" size="sm" className="justify-start" onClick={() => navigate('/projects')}>
                 <Github className="w-4 h-4 mr-2" />
                 GitHub
               </Button>
