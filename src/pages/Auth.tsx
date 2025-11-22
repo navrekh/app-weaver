@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { ForgotPasswordModal } from '@/components/ForgotPasswordModal';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
 import { Smartphone, Eye, EyeOff } from 'lucide-react';
@@ -24,6 +25,7 @@ const Auth = () => {
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -140,6 +142,11 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
+      <ForgotPasswordModal 
+        open={forgotPasswordOpen} 
+        onOpenChange={setForgotPasswordOpen}
+      />
+      
       <Card className="w-full max-w-md p-8 space-y-6 bg-background/80 backdrop-blur-sm border-border/50 shadow-2xl">
         <div className="text-center space-y-2">
           <div className="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center mx-auto shadow-lg">
@@ -238,6 +245,17 @@ const Auth = () => {
               mode === 'signin' ? 'Sign In' : 'Sign Up'
             )}
           </Button>
+
+          {mode === 'signin' && (
+            <Button
+              type="button"
+              variant="link"
+              onClick={() => setForgotPasswordOpen(true)}
+              className="text-sm text-muted-foreground hover:text-primary"
+            >
+              Forgot your password?
+            </Button>
+          )}
         </form>
 
         <div className="text-center space-y-2">
