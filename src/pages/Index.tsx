@@ -1,6 +1,9 @@
 import { Navigation } from "@/components/Navigation";
 import { PricingModal } from "@/components/PricingModal";
 import { PublishModal } from "@/components/PublishModal";
+import { DeviceFrameSelector } from "@/components/DeviceFrameSelector";
+import { QRCodeGenerator } from "@/components/QRCodeGenerator";
+import { ExportMenu } from "@/components/ExportMenu";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -122,37 +125,31 @@ const Index = () => {
         {/* Center - Phone Preview */}
         <main className="flex-1 flex flex-col items-center justify-center p-8 bg-muted/20">
           <div className="flex gap-3 mb-6">
-            <Button variant="outline" size="sm" className="glass">
-              <Download className="w-4 h-4 mr-2" />
-              Download APK
-            </Button>
-            <Button variant="outline" size="sm" className="glass">
-              <Download className="w-4 h-4 mr-2" />
-              Download IPA
-            </Button>
+            <QRCodeGenerator 
+              projectUrl="https://yourdomain.com/preview/demo-app"
+              projectName="Demo App"
+            />
+            <ExportMenu 
+              projectId="demo-project"
+              projectName="Demo App"
+            />
           </div>
           
-          {/* Phone Mockup */}
-          <div className="relative w-[340px] h-[680px] bg-background border-8 border-foreground rounded-[3rem] shadow-2xl overflow-hidden">
-            {/* Phone Notch */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-36 h-7 bg-foreground rounded-b-2xl z-10" />
-            
-            {/* Phone Content */}
-            <div className="h-full bg-gradient-to-b from-background to-muted p-6 pt-14 overflow-y-auto">
+          {/* Device Frame with Selector */}
+          <DeviceFrameSelector>
+            <div key={appType} className="h-full animate-fade-in">
               {isGenerating ? (
-                <div className="flex flex-col items-center justify-center h-full">
+                <div className="flex flex-col items-center justify-center h-full bg-gradient-to-b from-background to-muted p-6">
                   <div className="w-16 h-16 rounded-full bg-primary animate-pulse mb-4" />
                   <p className="text-center text-sm text-primary animate-pulse">
                     Generating your app...
                   </p>
                 </div>
               ) : (
-                <div key={appType} className="h-full animate-fade-in">
-                  {renderAppScreen()}
-                </div>
+                renderAppScreen()
               )}
             </div>
-          </div>
+          </DeviceFrameSelector>
         </main>
 
         {/* Right Sidebar - AI Chat */}
