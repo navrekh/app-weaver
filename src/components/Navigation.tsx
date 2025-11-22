@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Smartphone, Github, DollarSign, Upload, User, LogOut, Menu } from "lucide-react";
+import { Github, DollarSign, Upload, User, LogOut, Menu } from "lucide-react";
 import { useState } from "react";
+import aiLogo from "@/assets/ai-logo.png";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,11 +31,9 @@ export const Navigation = ({ onPricingClick, onPublishClick }: NavigationProps) 
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 glass">
       <div className="px-4 mx-auto">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
-              <Smartphone className="w-5 h-5 text-primary" />
-            </div>
-            <span className="text-xl font-bold">AppDev</span>
+          <div className="flex items-center gap-3">
+            <img src={aiLogo} alt="AppDev AI" className="w-10 h-10 object-contain animate-glow-pulse" />
+            <span className="text-xl font-bold text-gradient">AppDev</span>
           </div>
           
           {/* Desktop Navigation */}
