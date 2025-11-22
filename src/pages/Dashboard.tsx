@@ -161,7 +161,8 @@ const Dashboard = () => {
             </div>
           </div>
           
-          <div className="flex-1 p-4 space-y-4 overflow-y-auto bg-muted/30" style={{ maxHeight: 'calc(100vh - 280px)' }}>
+          {/* Chat Messages - Now Above Input */}
+          <div className="flex-1 p-4 space-y-4 overflow-y-auto bg-muted/30 border-2 border-primary/30 rounded-lg m-4" style={{ maxHeight: 'calc(100vh - 340px)' }}>
             {messages.map((message, index) => (
               <div
                 key={index}
@@ -192,6 +193,7 @@ const Dashboard = () => {
             )}
           </div>
           
+          {/* Input Section Below Chat */}
           <div className="p-4 border-t border-border/50 space-y-3 bg-card">
             <Button variant="outline" className="w-full glass justify-center">
               <Download className="w-4 h-4 mr-2" />
