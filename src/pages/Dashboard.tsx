@@ -280,19 +280,24 @@ const Dashboard = () => {
           
           {/* Input Section */}
           <div className="p-4 border-t border-border/50 space-y-3 bg-card">
+            <Button variant="outline" className="w-full glass justify-center border-primary/30">
+              <Download className="w-4 h-4 mr-2" />
+              Import Figma Design
+            </Button>
+
             <div className="flex gap-2">
               <Input
                 placeholder="Project Name"
                 value={projectName}
                 onChange={(e) => setProjectName(e.target.value)}
-                className="flex-1"
+                className="flex-1 border-primary/30"
               />
             </div>
 
             <div className="flex gap-2">
               <Input 
                 placeholder={`Describe your ${framework} app...`}
-                className="glass bg-background text-foreground"
+                className="bg-background text-foreground border-primary/30"
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && !isGenerating && handleSendMessage()}
