@@ -1,7 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Smartphone, Github, DollarSign } from "lucide-react";
 
-export const Navigation = () => {
+interface NavigationProps {
+  onPricingClick: () => void;
+}
+
+export const Navigation = ({ onPricingClick }: NavigationProps) => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 glass">
       <div className="px-4 mx-auto">
@@ -18,7 +22,7 @@ export const Navigation = () => {
               <Github className="w-4 h-4 mr-2" />
               GitHub
             </Button>
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" onClick={onPricingClick}>
               <DollarSign className="w-4 h-4 mr-2" />
               Pricing
             </Button>
