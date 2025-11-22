@@ -5,6 +5,13 @@ import { Heart, MessageCircle, Share2 } from "lucide-react";
 
 export const SocialFeedScreen = () => {
   const [tab, setTab] = useState<"feed" | "messages" | "profile">("feed");
+  const [likedFirst, setLikedFirst] = useState(false);
+  const [likesFirst, setLikesFirst] = useState(24);
+
+  const toggleLikeFirst = () => {
+    setLikedFirst((prev) => !prev);
+    setLikesFirst((prev) => (likedFirst ? prev - 1 : prev + 1));
+  };
 
   const renderFeed = () => (
     <div className="space-y-4 mt-2">
@@ -19,9 +26,13 @@ export const SocialFeedScreen = () => {
         <p className="text-sm mb-3">Just launched my new app! So excited to share it with you all 🚀</p>
         <div className="aspect-video bg-gradient-to-br from-primary/20 to-primary/10 rounded-lg mb-3" />
         <div className="flex gap-4">
-          <Button variant="ghost" size="sm">
+          <Button
+            variant={likedFirst ? "default" : "ghost"}
+            size="sm"
+            onClick={toggleLikeFirst}
+          >
             <Heart className="w-4 h-4 mr-1" />
-            24
+            {likesFirst}
           </Button>
           <Button variant="ghost" size="sm">
             <MessageCircle className="w-4 h-4 mr-1" />

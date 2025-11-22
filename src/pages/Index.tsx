@@ -147,7 +147,9 @@ const Index = () => {
                   </p>
                 </div>
               ) : (
-                renderAppScreen()
+                <div key={appType} className="h-full animate-fade-in">
+                  {renderAppScreen()}
+                </div>
               )}
             </div>
           </div>
