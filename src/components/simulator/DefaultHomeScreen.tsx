@@ -1,8 +1,47 @@
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Smartphone, Star, Settings } from "lucide-react";
 
 export const DefaultHomeScreen = () => {
+  const [section, setSection] = useState<"home" | "features" | "settings">("home");
+
+  const handleSelect = (next: "home" | "features" | "settings") => {
+    setSection(next);
+  };
+
+  const renderDetails = () => {
+    switch (section) {
+      case "features":
+        return (
+          <Card className="p-4 mt-2 space-y-2">
+            <p className="text-sm font-semibold">Key Features</p>
+            <p className="text-xs text-muted-foreground">
+              Describe your main user flows here – onboarding, core actions, and value.
+            </p>
+          </Card>
+        );
+      case "settings":
+        return (
+          <Card className="p-4 mt-2 space-y-2">
+            <p className="text-sm font-semibold">Settings</p>
+            <p className="text-xs text-muted-foreground">
+              Toggle themes, notifications, and privacy options for your users.
+            </p>
+          </Card>
+        );
+      default:
+        return (
+          <Card className="p-4 mt-2 space-y-2">
+            <p className="text-sm font-semibold">Home</p>
+            <p className="text-xs text-muted-foreground">
+              This is your main landing screen. Use it to highlight the primary action.
+            </p>
+          </Card>
+        );
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="text-center">
@@ -14,7 +53,13 @@ export const DefaultHomeScreen = () => {
       </div>
 
       <div className="space-y-3">
-        <Card className="p-4 hover:bg-accent transition-colors cursor-pointer">
+        <Card
+          className="p-4 hover:bg-accent transition-colors cursor-pointer"
+          role="button"
+          tabIndex={0}
+          onClick={() => handleSelect("home")}
+          onKeyDown={(e) => e.key === "Enter" && handleSelect("home")}
+        >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center">
               <Smartphone className="w-5 h-5 text-primary" />
@@ -26,7 +71,13 @@ export const DefaultHomeScreen = () => {
           </div>
         </Card>
 
-        <Card className="p-4 hover:bg-accent transition-colors cursor-pointer">
+        <Card
+          className="p-4 hover:bg-accent transition-colors cursor-pointer"
+          role="button"
+          tabIndex={0}
+          onClick={() => handleSelect("features")}
+          onKeyDown={(e) => e.key === "Enter" && handleSelect("features")}
+        >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center">
               <Star className="w-5 h-5 text-primary" />
@@ -38,7 +89,13 @@ export const DefaultHomeScreen = () => {
           </div>
         </Card>
 
-        <Card className="p-4 hover:bg-accent transition-colors cursor-pointer">
+        <Card
+          className="p-4 hover:bg-accent transition-colors cursor-pointer"
+          role="button"
+          tabIndex={0}
+          onClick={() => handleSelect("settings")}
+          onKeyDown={(e) => e.key === "Enter" && handleSelect("settings")}
+        >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center">
               <Settings className="w-5 h-5 text-primary" />
@@ -50,6 +107,8 @@ export const DefaultHomeScreen = () => {
           </div>
         </Card>
       </div>
+
+      {renderDetails()}
     </div>
   );
 };
