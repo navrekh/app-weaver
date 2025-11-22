@@ -7,8 +7,8 @@ import { ExportMenu } from "@/components/ExportMenu";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { 
   Smartphone, 
   Download, 
@@ -21,16 +21,20 @@ import {
   Plus,
   Code2,
   FileCode,
-  Loader2
+  Loader2,
+  Save
 } from "lucide-react";
 import { geminiCodeGenerator } from "@/services/geminiCodeGenerator";
 import { useToast } from "@/hooks/use-toast";
+import { useProjects } from "@/hooks/useProjects";
+import { apiClient } from "@/config/aws";
 import { CricketHomeScreen } from "@/components/simulator/CricketHomeScreen";
 import { EcommerceHomeScreen } from "@/components/simulator/EcommerceHomeScreen";
 import { SocialFeedScreen } from "@/components/simulator/SocialFeedScreen";
 import { DefaultHomeScreen } from "@/components/simulator/DefaultHomeScreen";
 
 const Dashboard = () => {
+  const location = useLocation();
   const [pricingOpen, setPricingOpen] = useState(false);
   const [publishOpen, setPublishOpen] = useState(false);
   const [messages, setMessages] = useState<Array<{ role: string; content: string; timestamp: string; code?: any }>>([
@@ -45,7 +49,93 @@ const Dashboard = () => {
   const [appType, setAppType] = useState<"default" | "cricket" | "ecommerce" | "social">("default");
   const [framework, setFramework] = useState<'react-native' | 'flutter'>('react-native');
   const [projectName, setProjectName] = useState('MyApp');
+  const [currentProjectId, setCurrentProjectId] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
+  const { createProject, updateProject } = useProjects();
+
+  // Load project if resuming
+  useEffect(() => {
+    const projectId = location.state?.projectId;
+    if (projectId) {
+      loadProject(projectId);
+    }
+  }, [location.state]);
+
+  const loadProject = async (projectId: string) => {
+    try {
+      const project = await apiClient.getProject(projectId) as any;
+      setCurrentProjectId(projectId);
+      setProjectName(project.name);
+      
+      if (project.config) {
+        setFramework(project.config.framework || 'react-native');
+        setAppType(project.config.appType || 'default');
+        setMessages(project.config.messages || messages);
+      }
+      
+      toast({
+        title: 'Project Loaded',
+        description: `Resumed working on "${project.name}"`,
+      });
+    } catch (error) {
+      console.error('Failed to load project:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to load project',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleSaveProject = async () => {
+    if (!projectName.trim()) {
+      toast({
+        title: 'Error',
+        description: 'Please enter a project name',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const projectData = {
+        name: projectName,
+        type: framework,
+        description: `${framework} app - ${appType}`,
+        status: 'in_progress' as const,
+        config: {
+          framework,
+          appType,
+          messages,
+        },
+      };
+
+      if (currentProjectId) {
+        await updateProject({ id: currentProjectId, data: projectData as any });
+      } else {
+        const newProject = await createProject(projectData as any) as any;
+        if (newProject?.id) {
+          setCurrentProjectId(newProject.id);
+        }
+      }
+
+      toast({
+        title: 'Project Saved',
+        description: `"${projectName}" has been saved successfully`,
+      });
+    } catch (error) {
+      console.error('Failed to save project:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to save project',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const handleFigmaImport = () => {
     const input = document.createElement('input');
@@ -302,14 +392,29 @@ const Dashboard = () => {
           
           {/* Input Section */}
           <div className="p-4 border-t border-border/50 space-y-3 bg-card">
-            <Button 
-              variant="outline" 
-              className="w-full glass justify-center border-primary/30"
-              onClick={handleFigmaImport}
-            >
-              <Download className="w-4 h-4 mr-2" />
-              Import Figma Design
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                className="flex-1 glass justify-center border-primary/30"
+                onClick={handleFigmaImport}
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Import Figma
+              </Button>
+              <Button 
+                variant="outline" 
+                className="flex-1 glass justify-center border-primary/30"
+                onClick={handleSaveProject}
+                disabled={isSaving}
+              >
+                {isSaving ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <Save className="w-4 h-4 mr-2" />
+                )}
+                {currentProjectId ? 'Update' : 'Save'}
+              </Button>
+            </div>
 
             <div className="flex gap-2">
               <Input
