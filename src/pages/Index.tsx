@@ -1,7 +1,9 @@
 import { Navigation } from "@/components/Navigation";
+import { PricingModal } from "@/components/PricingModal";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
 import { 
   Smartphone, 
   Download, 
@@ -15,9 +17,12 @@ import {
 } from "lucide-react";
 
 const Index = () => {
+  const [pricingOpen, setPricingOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <Navigation />
+      <Navigation onPricingClick={() => setPricingOpen(true)} />
+      <PricingModal open={pricingOpen} onOpenChange={setPricingOpen} />
       
       {/* Main Dashboard Layout */}
       <div className="flex-1 flex overflow-hidden pt-16">
