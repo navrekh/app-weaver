@@ -1,5 +1,6 @@
 import { Navigation } from "@/components/Navigation";
 import { PricingModal } from "@/components/PricingModal";
+import { PublishModal } from "@/components/PublishModal";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -18,11 +19,16 @@ import {
 
 const Index = () => {
   const [pricingOpen, setPricingOpen] = useState(false);
+  const [publishOpen, setPublishOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <Navigation onPricingClick={() => setPricingOpen(true)} />
+      <Navigation 
+        onPricingClick={() => setPricingOpen(true)}
+        onPublishClick={() => setPublishOpen(true)}
+      />
       <PricingModal open={pricingOpen} onOpenChange={setPricingOpen} />
+      <PublishModal open={publishOpen} onOpenChange={setPublishOpen} />
       
       {/* Main Dashboard Layout */}
       <div className="flex-1 flex overflow-hidden pt-16">
