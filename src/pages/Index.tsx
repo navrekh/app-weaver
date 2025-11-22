@@ -150,41 +150,37 @@ const Index = () => {
           
           {/* Device Frame with Selector */}
           <DeviceFrameSelector>
-            <div key={appType} className="h-full animate-fade-in flex flex-col">
-              <div className="flex-1 overflow-auto">
-                {isGenerating ? (
-                  <div className="flex flex-col items-center justify-center h-full bg-gradient-to-b from-background to-muted p-6">
-                    <div className="w-16 h-16 rounded-full bg-primary animate-pulse mb-4" />
-                    <p className="text-center text-sm text-primary animate-pulse">
-                      Generating your app...
-                    </p>
-                  </div>
-                ) : (
-                  renderAppScreen()
-                )}
-              </div>
-              
-              {/* Download Buttons */}
-              <div className="p-3 bg-background/95 border-t border-border/50 flex gap-2">
-                <Button 
-                  variant="default" 
-                  className="flex-1 gap-2" 
-                  size="sm"
-                >
-                  <Download className="w-4 h-4" />
-                  Download APK
-                </Button>
-                <Button 
-                  variant="default" 
-                  className="flex-1 gap-2" 
-                  size="sm"
-                >
-                  <Download className="w-4 h-4" />
-                  Download IPA
-                </Button>
-              </div>
+            <div key={appType} className="h-full animate-fade-in">
+              {isGenerating ? (
+                <div className="flex flex-col items-center justify-center h-full bg-gradient-to-b from-background to-muted p-6">
+                  <div className="w-16 h-16 rounded-full bg-primary animate-pulse mb-4" />
+                  <p className="text-center text-sm text-primary animate-pulse">
+                    Generating your app...
+                  </p>
+                </div>
+              ) : (
+                renderAppScreen()
+              )}
             </div>
           </DeviceFrameSelector>
+          
+          {/* Download Buttons - Below Mobile Screen */}
+          <div className="flex gap-3 mt-6">
+            <Button 
+              variant="default" 
+              className="gap-2"
+            >
+              <Download className="w-4 h-4" />
+              Download APK
+            </Button>
+            <Button 
+              variant="default" 
+              className="gap-2"
+            >
+              <Download className="w-4 h-4" />
+              Download IPA
+            </Button>
+          </div>
         </main>
 
         {/* Right Sidebar - AI Chat */}
