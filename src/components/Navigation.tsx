@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Github, DollarSign, Upload, User, LogOut, Menu } from "lucide-react";
 import { useState } from "react";
-import appDevLogo from "@/assets/appdev-logo.png";
+import logoIcon from "@/assets/logo-icon.png";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,7 +32,7 @@ export const Navigation = ({ onPricingClick, onPublishClick }: NavigationProps) 
       <div className="px-4 mx-auto">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-3">
-            <img src={appDevLogo} alt="AppDev" className="w-10 h-10 object-contain animate-glow-pulse" />
+            <img src={logoIcon} alt="AppDev" className="w-9 h-9 object-contain animate-glow-pulse" />
             <span className="text-xl font-bold text-gradient">AppDev</span>
           </div>
           
