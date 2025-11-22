@@ -57,30 +57,30 @@ export const Hero = () => {
               </div>
               
               {/* Phone Mockup */}
-              <div className="relative w-[280px] h-[500px] bg-background border-8 border-foreground rounded-[3rem] shadow-2xl overflow-hidden">
+              <div className="relative w-[340px] h-[680px] bg-background border-8 border-foreground rounded-[3rem] shadow-2xl overflow-hidden">
                 {/* Phone Notch */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-foreground rounded-b-2xl z-10" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-36 h-7 bg-foreground rounded-b-2xl z-10" />
                 
                 {/* Phone Content */}
-                <div className="h-full bg-gradient-to-b from-background to-muted p-6 pt-12">
-                  <div className="flex items-center justify-between mb-8">
-                    <h2 className="text-xl font-bold">My App</h2>
-                    <div className="w-10 h-10 rounded-full bg-primary animate-pulse" />
+                <div className="h-full bg-gradient-to-b from-background to-muted p-8 pt-14">
+                  <div className="flex items-center justify-between mb-10">
+                    <h2 className="text-2xl font-bold">My App</h2>
+                    <div className="w-12 h-12 rounded-full bg-primary animate-pulse" />
                   </div>
                   
-                  <Card className="p-4 bg-background/80 border-border">
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
-                        <Smartphone className="w-4 h-4 text-primary" />
+                  <Card className="p-5 bg-background/80 border-border">
+                    <div className="flex items-center gap-4 mb-2">
+                      <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center">
+                        <Smartphone className="w-5 h-5 text-primary" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-sm">Welcome Screen</h3>
-                        <p className="text-xs text-muted-foreground">Ready to use</p>
+                        <h3 className="font-semibold text-base">Welcome Screen</h3>
+                        <p className="text-sm text-muted-foreground">Ready to use</p>
                       </div>
                     </div>
                   </Card>
                   
-                  <p className="text-center text-sm text-muted-foreground mt-8">
+                  <p className="text-center text-base text-muted-foreground mt-12">
                     Start by describing your app idea
                   </p>
                 </div>
