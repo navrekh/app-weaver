@@ -15,4 +15,8 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  define: {
+    // Polyfill Node.js global for browser
+    global: 'globalThis',
+  },
 }));
