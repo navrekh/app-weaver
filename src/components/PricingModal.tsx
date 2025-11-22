@@ -8,13 +8,99 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Card } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
+import { apiClient } from "@/config/aws";
+import { useState } from "react";
 
 interface PricingModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
+
 export const PricingModal = ({ open, onOpenChange }: PricingModalProps) => {
+  const { toast } = useToast();
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handlePayment = async () => {
+    setIsProcessing(true);
+    try {
+      // Create order on backend
+      const orderData: any = await apiClient.request('/payments/create-order', {
+        method: 'POST',
+        body: JSON.stringify({
+          amount: 200000, // ₹2,000 in paise
+          currency: 'INR',
+          credits: 100,
+        }),
+      });
+
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: 'CrossPlatform AI',
+        description: 'Pro Plan - 100 Credits',
+        order_id: orderData.id,
+        handler: async function (response: any) {
+          try {
+            // Verify payment on backend
+            await apiClient.request('/payments/verify', {
+              method: 'POST',
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              }),
+            });
+
+            toast({
+              title: "Payment Successful!",
+              description: "100 credits have been added to your account.",
+            });
+            onOpenChange(false);
+          } catch (error) {
+            toast({
+              title: "Payment Verification Failed",
+              description: "Please contact support.",
+              variant: "destructive",
+            });
+          }
+        },
+        prefill: {
+          name: '',
+          email: '',
+          contact: '',
+        },
+        theme: {
+          color: 'hsl(var(--primary))',
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.on('payment.failed', function (response: any) {
+        toast({
+          title: "Payment Failed",
+          description: response.error.description,
+          variant: "destructive",
+        });
+      });
+      rzp.open();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to initiate payment. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl">
@@ -114,8 +200,13 @@ export const PricingModal = ({ open, onOpenChange }: PricingModalProps) => {
               </p>
             </div>
 
-            <Button className="w-full bg-primary hover:bg-primary/90" size="lg">
-              Buy Credits
+            <Button 
+              className="w-full bg-primary hover:bg-primary/90" 
+              size="lg"
+              onClick={handlePayment}
+              disabled={isProcessing}
+            >
+              {isProcessing ? "Processing..." : "Buy Credits"}
             </Button>
           </Card>
         </div>
