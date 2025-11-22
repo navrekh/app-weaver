@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Download, Github, FileArchive, Smartphone } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { apiClient } from "@/config/aws";
 
 interface ExportMenuProps {
   projectId: string;
@@ -23,34 +24,30 @@ export const ExportMenu = ({ projectId, projectName }: ExportMenuProps) => {
     setIsExporting(true);
     
     try {
-      // This will call your AWS Lambda function
       toast({
         title: "Export Started",
         description: `Preparing ${format} export. This may take a moment...`,
       });
 
-      // TODO: Replace with your AWS API Gateway endpoint
-      // const response = await fetch(`${AWS_CONFIG.apiEndpoint}/projects/${projectId}/export`, {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ format })
-      // });
+      // Call AWS Lambda function via API Gateway
+      const response = await apiClient.generateExport(projectId, format as 'zip' | 'github');
       
-      // Simulate export for now
-      setTimeout(() => {
-        toast({
-          title: "Export Ready",
-          description: `Your ${format} export is ready for download`,
-        });
-        setIsExporting(false);
-      }, 2000);
+      toast({
+        title: "Export Ready",
+        description: `Your ${format} export is ready for download`,
+      });
       
+      // Handle download if URL is provided
+      if (response && (response as any).downloadUrl) {
+        window.open((response as any).downloadUrl, '_blank');
+      }
     } catch (error) {
       toast({
         title: "Export Failed",
-        description: "Unable to export project",
+        description: error instanceof Error ? error.message : "Unable to export project",
         variant: "destructive",
       });
+    } finally {
       setIsExporting(false);
     }
   };

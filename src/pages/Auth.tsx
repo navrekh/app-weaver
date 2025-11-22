@@ -77,10 +77,15 @@ const Auth = () => {
 
     try {
       if (mode === 'signup') {
-        const { error } = await signUp(formData.email, formData.password, formData.name);
+        // Split name into first and last name
+        const nameParts = formData.name.trim().split(' ');
+        const firstName = nameParts[0] || '';
+        const lastName = nameParts.slice(1).join(' ') || '';
+        
+        const { error } = await signUp(formData.email, formData.password, firstName, lastName);
         
         if (error) {
-          if (error.message.includes('already exists') || error.message.includes('duplicate')) {
+          if (error.message.includes('already exists') || error.message.includes('duplicate') || error.message.includes('UsernameExistsException')) {
             toast({
               title: 'Account Already Exists',
               description: 'An account with this email already exists. Please sign in instead.',
@@ -99,9 +104,10 @@ const Auth = () => {
 
         toast({
           title: 'Account Created!',
-          description: 'Welcome to AppDev. Your account has been created successfully.',
+          description: 'Please check your email to verify your account before signing in.',
         });
-        navigate('/', { replace: true });
+        setMode('signin');
+        setFormData({ ...formData, password: '' });
       } else {
         const { error } = await signIn(formData.email, formData.password);
         
