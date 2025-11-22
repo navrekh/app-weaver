@@ -1,38 +1,161 @@
 import { Navigation } from "@/components/Navigation";
-import { Hero } from "@/components/Hero";
-import { Features } from "@/components/Features";
-import { Pricing } from "@/components/Pricing";
-import { CTA } from "@/components/CTA";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { 
+  Smartphone, 
+  Download, 
+  Send, 
+  Home, 
+  FolderOpen, 
+  History,
+  Github,
+  DollarSign,
+  Plus
+} from "lucide-react";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <Navigation />
-      <Hero />
-      <Features />
-      <Pricing />
-      <CTA />
       
-      <footer className="border-t border-border/50 py-8">
-        <div className="container px-4 mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-muted-foreground">
-              © 2024 AppDev. All rights reserved.
-            </p>
-            <div className="flex gap-6">
-              <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                Privacy
-              </a>
-              <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                Terms
-              </a>
-              <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                Contact
-              </a>
+      {/* Main Dashboard Layout */}
+      <div className="flex-1 flex overflow-hidden pt-16">
+        {/* Left Sidebar */}
+        <aside className="w-48 border-r border-border/50 bg-background/50 p-4 flex flex-col gap-2">
+          <button className="flex items-center gap-3 px-4 py-2 rounded-lg bg-accent text-accent-foreground transition-colors text-sm font-medium">
+            <Home className="w-4 h-4" />
+            <span>Home</span>
+          </button>
+          <button className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-accent transition-colors text-sm">
+            <FolderOpen className="w-4 h-4" />
+            <span>My Projects</span>
+          </button>
+          <button className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-accent transition-colors text-sm">
+            <History className="w-4 h-4" />
+            <span>Build History</span>
+          </button>
+        </aside>
+
+        {/* Center - Phone Preview */}
+        <main className="flex-1 flex flex-col items-center justify-center p-8 bg-muted/20">
+          <div className="flex gap-3 mb-6">
+            <Button variant="outline" size="sm" className="glass">
+              <Download className="w-4 h-4 mr-2" />
+              Download APK
+            </Button>
+            <Button variant="outline" size="sm" className="glass">
+              <Download className="w-4 h-4 mr-2" />
+              Download IPA
+            </Button>
+          </div>
+          
+          {/* Phone Mockup */}
+          <div className="relative w-[340px] h-[680px] bg-background border-8 border-foreground rounded-[3rem] shadow-2xl overflow-hidden">
+            {/* Phone Notch */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-36 h-7 bg-foreground rounded-b-2xl z-10" />
+            
+            {/* Phone Content */}
+            <div className="h-full bg-gradient-to-b from-background to-muted p-8 pt-14">
+              <div className="flex items-center justify-between mb-10">
+                <h2 className="text-2xl font-bold">My App</h2>
+                <div className="w-12 h-12 rounded-full bg-primary animate-pulse" />
+              </div>
+              
+              <Card className="p-5 bg-background/80 border-border mb-6">
+                <div className="flex items-center gap-4 mb-2">
+                  <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center">
+                    <Smartphone className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-base">Welcome Screen</h3>
+                    <p className="text-sm text-muted-foreground">Ready to use</p>
+                  </div>
+                </div>
+              </Card>
+              
+              <p className="text-center text-base text-muted-foreground mt-12">
+                Start by describing your app idea
+              </p>
+
+              <Button className="w-full mt-auto bg-primary hover:bg-primary/90 text-primary-foreground" size="lg">
+                New Price
+              </Button>
+
+              <div className="flex gap-2 mt-4">
+                <Button variant="outline" size="sm" className="flex-1">
+                  <span className="text-red-500 mr-2">🔴</span>
+                  Sign In
+                </Button>
+                <Button variant="outline" size="sm" className="flex-1">
+                  <span className="text-red-500 mr-2">🔴</span>
+                  Sign Up
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </footer>
+        </main>
+
+        {/* Right Sidebar - AI Chat */}
+        <aside className="w-96 border-l border-border/50 bg-background/50 flex flex-col">
+          <div className="p-4 border-b border-border/50">
+            <div className="flex items-center gap-2">
+              <Smartphone className="w-5 h-5 text-primary" />
+              <h3 className="font-semibold">AI Assistant</h3>
+            </div>
+          </div>
+          
+          <div className="flex-1 p-4 space-y-4 overflow-auto">
+            <div className="bg-primary/10 rounded-lg p-3">
+              <p className="text-sm">Welcome to AppDev! Describe your app idea or paste a Figma URL to get started.</p>
+              <p className="text-xs text-muted-foreground mt-1">6:22 PM</p>
+            </div>
+            
+            <div className="bg-secondary/50 rounded-lg p-3 ml-8">
+              <p className="text-sm">cricket app</p>
+              <p className="text-xs text-muted-foreground mt-1 text-right">6:03 PM</p>
+            </div>
+            
+            <div className="bg-primary/10 rounded-lg p-3">
+              <p className="text-sm">I'm generating your app based on "cricket app". Creating screens, components, and navigation...</p>
+              <p className="text-xs text-muted-foreground mt-1">6:03 PM</p>
+            </div>
+          </div>
+          
+          <div className="p-4 border-t border-border/50 space-y-3">
+            <Button variant="outline" className="w-full glass justify-start">
+              <Download className="w-4 h-4 mr-2" />
+              Import Figma Design
+            </Button>
+
+            <div>
+              <p className="text-xs text-muted-foreground mb-2">Target Framework</p>
+              <div className="flex gap-2">
+                <Button variant="default" size="sm" className="flex-1 bg-primary hover:bg-primary/90">
+                  React Native
+                </Button>
+                <Button variant="ghost" size="sm" className="flex-1">
+                  Flutter
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              <Input 
+                placeholder="Describe your app or paste Figma URL..." 
+                className="glass"
+              />
+              <Button size="icon" className="bg-primary hover:bg-primary/90 shrink-0">
+                <Send className="w-4 h-4" />
+              </Button>
+            </div>
+
+            <p className="text-xs text-muted-foreground text-center">
+              No preview yet. Trigger generation from the AI assistant.
+            </p>
+          </div>
+        </aside>
+      </div>
     </div>
   );
 };
