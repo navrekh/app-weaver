@@ -2,10 +2,13 @@
 import { CognitoUserPool, CognitoUser, AuthenticationDetails, CognitoUserAttribute } from 'amazon-cognito-identity-js';
 import { AWS_CONFIG } from '@/config/aws';
 
-const userPool = new CognitoUserPool({
-  UserPoolId: AWS_CONFIG.cognitoUserPoolId,
-  ClientId: AWS_CONFIG.cognitoClientId,
-});
+// Only initialize Cognito if credentials are provided
+const userPool = AWS_CONFIG.cognitoUserPoolId && AWS_CONFIG.cognitoClientId
+  ? new CognitoUserPool({
+      UserPoolId: AWS_CONFIG.cognitoUserPoolId,
+      ClientId: AWS_CONFIG.cognitoClientId,
+    })
+  : null;
 
 export interface CognitoSignUpParams {
   email: string;
@@ -25,8 +28,42 @@ export interface AuthUser {
   attributes?: { [key: string]: string };
 }
 
+// Check if Cognito is configured
+const isCognitoConfigured = () => !!userPool;
+
+// Mock storage for development
+const mockUsers = new Map<string, { email: string; password: string; name: string }>();
+const mockSessions = new Map<string, { email: string; token: string }>();
+
 export const cognitoAuth = {
   signUp: async ({ email, password, firstName, lastName }: CognitoSignUpParams): Promise<{ user: AuthUser | null; error: string | null }> => {
+    // Use mock auth if Cognito not configured
+    if (!isCognitoConfigured()) {
+      try {
+        if (mockUsers.has(email)) {
+          return { user: null, error: 'User already exists' };
+        }
+        
+        mockUsers.set(email, {
+          email,
+          password,
+          name: `${firstName || ''} ${lastName || ''}`.trim(),
+        });
+        
+        return {
+          user: {
+            username: email,
+            email,
+            attributes: { given_name: firstName || '', family_name: lastName || '' },
+          },
+          error: null,
+        };
+      } catch (error) {
+        return { user: null, error: 'Sign up failed' };
+      }
+    }
+
+    // AWS Cognito implementation
     return new Promise((resolve) => {
       const attributeList: CognitoUserAttribute[] = [
         new CognitoUserAttribute({ Name: 'email', Value: email }),
@@ -64,6 +101,38 @@ export const cognitoAuth = {
   },
 
   signIn: async ({ email, password }: CognitoSignInParams): Promise<{ user: AuthUser | null; token: string | null; error: string | null }> => {
+    // Use mock auth if Cognito not configured
+    if (!isCognitoConfigured()) {
+      try {
+        const mockUser = mockUsers.get(email);
+        
+        if (!mockUser || mockUser.password !== password) {
+          return { user: null, token: null, error: 'Invalid email or password' };
+        }
+        
+        const token = `mock_token_${Date.now()}`;
+        mockSessions.set(email, { email, token });
+        
+        const [firstName, ...lastNameParts] = mockUser.name.split(' ');
+        
+        return {
+          user: {
+            username: email,
+            email,
+            attributes: {
+              given_name: firstName || '',
+              family_name: lastNameParts.join(' ') || '',
+            },
+          },
+          token,
+          error: null,
+        };
+      } catch (error) {
+        return { user: null, token: null, error: 'Sign in failed' };
+      }
+    }
+
+    // AWS Cognito implementation
     return new Promise((resolve) => {
       const authenticationDetails = new AuthenticationDetails({
         Username: email,
@@ -72,7 +141,7 @@ export const cognitoAuth = {
 
       const cognitoUser = new CognitoUser({
         Username: email,
-        Pool: userPool,
+        Pool: userPool!,
       });
 
       cognitoUser.authenticateUser(authenticationDetails, {
@@ -109,15 +178,49 @@ export const cognitoAuth = {
   },
 
   signOut: () => {
-    const cognitoUser = userPool.getCurrentUser();
+    if (!isCognitoConfigured()) {
+      // Clear mock session
+      mockSessions.clear();
+      return;
+    }
+
+    const cognitoUser = userPool!.getCurrentUser();
     if (cognitoUser) {
       cognitoUser.signOut();
     }
   },
 
   getCurrentUser: (): Promise<{ user: AuthUser | null; token: string | null }> => {
+    // Use mock auth if Cognito not configured
+    if (!isCognitoConfigured()) {
+      const session = Array.from(mockSessions.values())[0];
+      if (!session) {
+        return Promise.resolve({ user: null, token: null });
+      }
+      
+      const mockUser = mockUsers.get(session.email);
+      if (!mockUser) {
+        return Promise.resolve({ user: null, token: null });
+      }
+      
+      const [firstName, ...lastNameParts] = mockUser.name.split(' ');
+      
+      return Promise.resolve({
+        user: {
+          username: session.email,
+          email: session.email,
+          attributes: {
+            given_name: firstName || '',
+            family_name: lastNameParts.join(' ') || '',
+          },
+        },
+        token: session.token,
+      });
+    }
+
+    // AWS Cognito implementation
     return new Promise((resolve) => {
-      const cognitoUser = userPool.getCurrentUser();
+      const cognitoUser = userPool!.getCurrentUser();
 
       if (!cognitoUser) {
         resolve({ user: null, token: null });
@@ -157,10 +260,21 @@ export const cognitoAuth = {
   },
 
   forgotPassword: async (email: string): Promise<{ error: string | null }> => {
+    // Mock implementation if Cognito not configured
+    if (!isCognitoConfigured()) {
+      if (!mockUsers.has(email)) {
+        return { error: 'User not found' };
+      }
+      // Simulate successful password reset email
+      console.log('Mock: Password reset email sent to', email);
+      return { error: null };
+    }
+
+    // AWS Cognito implementation
     return new Promise((resolve) => {
       const cognitoUser = new CognitoUser({
         Username: email,
-        Pool: userPool,
+        Pool: userPool!,
       });
 
       cognitoUser.forgotPassword({
@@ -175,10 +289,22 @@ export const cognitoAuth = {
   },
 
   confirmPassword: async (email: string, code: string, newPassword: string): Promise<{ error: string | null }> => {
+    // Mock implementation if Cognito not configured
+    if (!isCognitoConfigured()) {
+      const mockUser = mockUsers.get(email);
+      if (!mockUser) {
+        return { error: 'User not found' };
+      }
+      // Update password in mock storage
+      mockUser.password = newPassword;
+      return { error: null };
+    }
+
+    // AWS Cognito implementation
     return new Promise((resolve) => {
       const cognitoUser = new CognitoUser({
         Username: email,
-        Pool: userPool,
+        Pool: userPool!,
       });
 
       cognitoUser.confirmPassword(code, newPassword, {
