@@ -25,6 +25,9 @@ export const Navigation = () => {
             <Button variant="ghost" size="sm">
               Sign In/Sig up
             </Button>
+            <Button variant="outline" size="sm" className="glass">
+              + New Project
+            </Button>
             <Button size="sm" className="bg-primary hover:bg-primary/90">
               Sign In / Sup
             </Button>
