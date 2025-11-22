@@ -2,6 +2,10 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Heart, MessageCircle, Share2, Send } from "lucide-react";
+import avatarSarah from "@/assets/avatar-sarah.jpg";
+import avatarMike from "@/assets/avatar-mike.jpg";
+import socialPost1 from "@/assets/social-post-1.jpg";
+import socialPost2 from "@/assets/social-post-2.jpg";
 
 export const SocialFeedScreen = () => {
   const [tab, setTab] = useState<"feed" | "messages" | "profile">("feed");
@@ -18,9 +22,7 @@ export const SocialFeedScreen = () => {
       <Card className="overflow-hidden border-border/50 shadow-lg bg-background/80 backdrop-blur-sm">
         <div className="p-4">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
-              SC
-            </div>
+            <img src={avatarSarah} alt="Sarah Chen" className="w-10 h-10 rounded-full object-cover shadow-lg" />
             <div>
               <p className="font-bold text-sm">Sarah Chen</p>
               <p className="text-xs text-muted-foreground">2 hours ago • 🌍 Public</p>
@@ -28,10 +30,8 @@ export const SocialFeedScreen = () => {
           </div>
           <p className="text-sm mb-3">Just launched my new app! So excited to share it with you all 🚀✨</p>
         </div>
-        <div className="aspect-video bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 relative">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-white text-4xl">🚀</div>
-          </div>
+        <div className="aspect-video relative overflow-hidden">
+          <img src={socialPost1} alt="App Launch" className="w-full h-full object-cover" />
         </div>
         <div className="p-4">
           <div className="flex items-center justify-between mb-3 text-xs text-muted-foreground">
@@ -63,9 +63,7 @@ export const SocialFeedScreen = () => {
       <Card className="overflow-hidden border-border/50 shadow-lg bg-background/80 backdrop-blur-sm">
         <div className="p-4">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
-              MJ
-            </div>
+            <img src={avatarMike} alt="Mike Johnson" className="w-10 h-10 rounded-full object-cover shadow-lg" />
             <div>
               <p className="font-bold text-sm">Mike Johnson</p>
               <p className="text-xs text-muted-foreground">5 hours ago • 🔒 Friends</p>
@@ -73,10 +71,8 @@ export const SocialFeedScreen = () => {
           </div>
           <p className="text-sm mb-3">Beautiful sunset at the beach today 🌅 Nature is amazing!</p>
         </div>
-        <div className="aspect-video bg-gradient-to-br from-orange-400 via-pink-400 to-purple-500 relative">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-white text-4xl">🌅</div>
-          </div>
+        <div className="aspect-video relative overflow-hidden">
+          <img src={socialPost2} alt="Beach Sunset" className="w-full h-full object-cover" />
         </div>
         <div className="p-4">
           <div className="flex items-center justify-between mb-3 text-xs text-muted-foreground">
@@ -106,8 +102,8 @@ export const SocialFeedScreen = () => {
     <div className="space-y-3">
       <Card className="p-4 hover-scale cursor-pointer bg-background/60 backdrop-blur-sm border-border/50 shadow-lg">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold shadow-lg relative">
-            DS
+          <div className="relative">
+            <img src={avatarSarah} alt="Design Squad" className="w-12 h-12 rounded-full object-cover shadow-lg" />
             <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background" />
           </div>
           <div className="flex-1">
@@ -122,9 +118,7 @@ export const SocialFeedScreen = () => {
 
       <Card className="p-4 hover-scale cursor-pointer bg-background/60 backdrop-blur-sm border-border/50 shadow-lg">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
-            PT
-          </div>
+          <img src={avatarMike} alt="Product Team" className="w-12 h-12 rounded-full object-cover shadow-lg" />
           <div className="flex-1">
             <div className="flex items-center justify-between mb-1">
               <p className="text-sm font-bold">Product Team</p>
@@ -137,8 +131,8 @@ export const SocialFeedScreen = () => {
 
       <Card className="p-4 hover-scale cursor-pointer bg-background/60 backdrop-blur-sm border-border/50 shadow-lg">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold shadow-lg relative">
-            EK
+          <div className="relative">
+            <img src={avatarSarah} alt="Emily Kim" className="w-12 h-12 rounded-full object-cover shadow-lg" />
             <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background" />
           </div>
           <div className="flex-1">

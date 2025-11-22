@@ -2,6 +2,10 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Star } from "lucide-react";
+import productHeadphones from "@/assets/product-headphones.jpg";
+import productWatch from "@/assets/product-watch.jpg";
+import productStand from "@/assets/product-stand.jpg";
+import productMouse from "@/assets/product-mouse.jpg";
 
 export const EcommerceHomeScreen = () => {
   const [tab, setTab] = useState<"home" | "cart" | "profile">("home");
@@ -23,7 +27,8 @@ export const EcommerceHomeScreen = () => {
 
       <div className="grid grid-cols-2 gap-3">
         <Card className="overflow-hidden hover-scale border-border/50 shadow-lg bg-background/80 backdrop-blur-sm">
-          <div className="aspect-square bg-gradient-to-br from-purple-500 to-pink-500 relative overflow-hidden">
+          <div className="aspect-square bg-muted relative overflow-hidden">
+            <img src={productHeadphones} alt="Premium Headphones" className="w-full h-full object-cover" />
             <div className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-0.5">
               <Star className="w-3 h-3 fill-yellow-900" />
               4.8
@@ -46,7 +51,8 @@ export const EcommerceHomeScreen = () => {
         </Card>
 
         <Card className="overflow-hidden hover-scale border-border/50 shadow-lg bg-background/80 backdrop-blur-sm">
-          <div className="aspect-square bg-gradient-to-br from-blue-500 to-cyan-500 relative overflow-hidden">
+          <div className="aspect-square bg-muted relative overflow-hidden">
+            <img src={productWatch} alt="Smart Watch" className="w-full h-full object-cover" />
             <div className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-0.5">
               <Star className="w-3 h-3 fill-yellow-900" />
               4.9
@@ -69,7 +75,8 @@ export const EcommerceHomeScreen = () => {
         </Card>
 
         <Card className="overflow-hidden hover-scale border-border/50 shadow-lg bg-background/80 backdrop-blur-sm">
-          <div className="aspect-square bg-gradient-to-br from-orange-500 to-red-500 relative overflow-hidden">
+          <div className="aspect-square bg-muted relative overflow-hidden">
+            <img src={productStand} alt="Laptop Stand" className="w-full h-full object-cover" />
             <div className="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
               SALE
             </div>
@@ -91,7 +98,8 @@ export const EcommerceHomeScreen = () => {
         </Card>
 
         <Card className="overflow-hidden hover-scale border-border/50 shadow-lg bg-background/80 backdrop-blur-sm">
-          <div className="aspect-square bg-gradient-to-br from-green-500 to-emerald-500 relative overflow-hidden">
+          <div className="aspect-square bg-muted relative overflow-hidden">
+            <img src={productMouse} alt="Wireless Mouse" className="w-full h-full object-cover" />
             <div className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-0.5">
               <Star className="w-3 h-3 fill-yellow-900" />
               5.0
