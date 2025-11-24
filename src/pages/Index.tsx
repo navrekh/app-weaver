@@ -130,8 +130,8 @@ const Index = () => {
       
       {/* Main Dashboard Layout */}
       <div className="flex-1 flex overflow-hidden pt-16 relative z-10">
-        {/* Left Sidebar */}
-        <aside className="w-48 border-r border-border/50 bg-background/50 backdrop-blur-sm p-4 flex flex-col gap-2 animate-slide-in-left">
+      {/* Left Sidebar */}
+        <aside className="w-40 border-r border-border/50 bg-background/50 backdrop-blur-sm p-4 flex flex-col gap-2 animate-slide-in-left">
           <Link to="/" className="flex items-center gap-3 px-4 py-2 rounded-lg bg-accent text-accent-foreground transition-colors text-sm font-medium">
             <Home className="w-4 h-4" />
             <span>Home</span>
@@ -191,7 +191,7 @@ const Index = () => {
         </main>
 
         {/* Right Sidebar - AI Chat */}
-        <aside className="w-[700px] border-l border-border/50 bg-card/50 backdrop-blur-sm flex flex-col animate-slide-in-right">
+        <aside className="flex-1 border-l border-border/50 bg-card/50 backdrop-blur-sm flex flex-col animate-slide-in-right">
           <div className="p-4 border-b border-border/50 bg-card">
             <div className="flex items-center gap-2">
               <Smartphone className="w-5 h-5 text-primary" />
@@ -209,7 +209,7 @@ const Index = () => {
                     : 'bg-background'
                 }`}
               >
-                <div className="max-w-3xl mx-auto">
+                <div className="w-full">
                   <div className="flex gap-4 mb-2">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
                       message.role === 'assistant'
@@ -239,7 +239,7 @@ const Index = () => {
             ))}
             {isGenerating && (
               <div className="py-8 px-6 bg-muted/20 border-b border-border/30">
-                <div className="max-w-3xl mx-auto">
+                <div className="w-full">
                   <div className="flex gap-4">
                     <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-primary/20 text-primary">
                       <Smartphone className="w-5 h-5" />
