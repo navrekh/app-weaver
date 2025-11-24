@@ -191,7 +191,7 @@ const Index = () => {
         </main>
 
         {/* Right Sidebar - AI Chat */}
-        <aside className="w-96 border-l border-border/50 bg-card/50 backdrop-blur-sm flex flex-col animate-slide-in-right">
+        <aside className="w-[700px] border-l border-border/50 bg-card/50 backdrop-blur-sm flex flex-col animate-slide-in-right">
           <div className="p-4 border-b border-border/50 bg-card">
             <div className="flex items-center gap-2">
               <Smartphone className="w-5 h-5 text-primary" />
@@ -203,30 +203,30 @@ const Index = () => {
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`py-6 px-4 border-b border-border/30 ${
+                className={`py-8 px-6 border-b border-border/30 ${
                   message.role === 'assistant'
                     ? 'bg-muted/20'
                     : 'bg-background'
                 }`}
               >
-                <div className="max-w-full">
-                  <div className="flex gap-3 mb-2">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
+                <div className="max-w-3xl mx-auto">
+                  <div className="flex gap-4 mb-2">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
                       message.role === 'assistant'
                         ? 'bg-primary/20 text-primary'
                         : 'bg-secondary text-secondary-foreground'
                     }`}>
                       {message.role === 'assistant' ? (
-                        <Smartphone className="w-4 h-4" />
+                        <Smartphone className="w-5 h-5" />
                       ) : (
-                        <span className="text-sm font-semibold">U</span>
+                        <span className="text-base font-semibold">U</span>
                       )}
                     </div>
-                    <div className="flex-1 space-y-2">
-                      <p className="text-sm font-semibold text-foreground">
+                    <div className="flex-1 space-y-3">
+                      <p className="text-base font-semibold text-foreground">
                         {message.role === 'assistant' ? 'AI Assistant' : 'You'}
                       </p>
-                      <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">
+                      <p className="text-base text-foreground leading-relaxed whitespace-pre-wrap">
                         {message.content}
                       </p>
                       <p className="text-xs text-muted-foreground">
@@ -238,14 +238,14 @@ const Index = () => {
               </div>
             ))}
             {isGenerating && (
-              <div className="py-6 px-4 bg-muted/20 border-b border-border/30">
-                <div className="max-w-full">
-                  <div className="flex gap-3">
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 bg-primary/20 text-primary">
-                      <Smartphone className="w-4 h-4" />
+              <div className="py-8 px-6 bg-muted/20 border-b border-border/30">
+                <div className="max-w-3xl mx-auto">
+                  <div className="flex gap-4">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-primary/20 text-primary">
+                      <Smartphone className="w-5 h-5" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-semibold text-foreground mb-2">AI Assistant</p>
+                      <p className="text-base font-semibold text-foreground mb-3">AI Assistant</p>
                       <div className="flex items-center gap-2">
                         <div className="w-2 h-2 bg-primary rounded-full animate-bounce" />
                         <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
