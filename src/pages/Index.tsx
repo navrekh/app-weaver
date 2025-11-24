@@ -199,32 +199,60 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="flex-1 p-4 space-y-4 overflow-y-auto bg-muted/30" style={{ maxHeight: 'calc(100vh - 280px)' }}>
+          <div className="flex-1 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 280px)' }}>
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`rounded-lg p-3 ${
+                className={`py-6 px-4 border-b border-border/30 ${
                   message.role === 'assistant'
-                    ? 'bg-primary/10 border border-primary/20'
-                    : 'bg-secondary border border-border ml-8'
+                    ? 'bg-muted/20'
+                    : 'bg-background'
                 }`}
               >
-                <p className={`text-sm ${
-                  message.role === 'assistant' ? 'text-foreground' : 'text-secondary-foreground'
-                }`}>
-                  {message.content}
-                </p>
-                <p className="text-xs text-muted-foreground mt-1 text-right">
-                  {message.timestamp}
-                </p>
+                <div className="max-w-full">
+                  <div className="flex gap-3 mb-2">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
+                      message.role === 'assistant'
+                        ? 'bg-primary/20 text-primary'
+                        : 'bg-secondary text-secondary-foreground'
+                    }`}>
+                      {message.role === 'assistant' ? (
+                        <Smartphone className="w-4 h-4" />
+                      ) : (
+                        <span className="text-sm font-semibold">U</span>
+                      )}
+                    </div>
+                    <div className="flex-1 space-y-2">
+                      <p className="text-sm font-semibold text-foreground">
+                        {message.role === 'assistant' ? 'AI Assistant' : 'You'}
+                      </p>
+                      <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">
+                        {message.content}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {message.timestamp}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             ))}
             {isGenerating && (
-              <div className="bg-primary/10 border border-primary/20 rounded-lg p-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce" />
-                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
-                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
+              <div className="py-6 px-4 bg-muted/20 border-b border-border/30">
+                <div className="max-w-full">
+                  <div className="flex gap-3">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 bg-primary/20 text-primary">
+                      <Smartphone className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-semibold text-foreground mb-2">AI Assistant</p>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-primary rounded-full animate-bounce" />
+                        <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                        <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
